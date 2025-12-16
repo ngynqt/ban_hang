@@ -10,5 +10,4 @@ Tính năng:
 
 Muốn tiếp theo:
 - Thêm backend (Node/Express, PHP, v.v.) để lưu đơn hàng
-- Kết nối cổng thanh toán (Stripe, VNPay)
 - Thêm quản trị để quản lý sản phẩm
