@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Đăng nhập / Đăng ký</title>
+    <style>
+        body{font-family:Segoe UI, Roboto, Arial;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f3f4f6}
+        .box{background:#fff;padding:20px;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.08);width:360px}
+        h2{margin:0 0 12px;font-size:18px}
+        .form{display:flex;flex-direction:column;gap:8px}
+        input{padding:8px;border:1px solid #e6e6e6;border-radius:6px}
+        .row{display:flex;gap:8px}
+        .muted{color:#666;font-size:13px}
+        .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+        .btn{padding:8px 12px;border-radius:6px;border:0;background:#eee;cursor:pointer}
+        .btn.primary{background:#0078d4;color:#fff}
+        .link{background:none;border:0;color:#0078d4;cursor:pointer;padding:0}
+        .msg{color:#b00020;font-size:13px}
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2 id="title">Đăng nhập</h2>
+
+        <form id="login-form" class="form">
+            <input id="login-email" type="email" placeholder="Email" required />
+            <input id="login-password" type="password" placeholder="Mật khẩu" required />
+            <div class="msg" id="login-msg"></div>
+            <div class="actions">
+                <button type="button" id="to-register" class="link">Đăng ký</button>
+                <button type="submit" class="btn primary">Đăng nhập</button>
+            </div>
+        </form>
+
+        <form id="register-form" class="form" style="display:none;margin-top:8px">
+            <input id="reg-name" type="text" placeholder="Họ và tên" required />
+            <input id="reg-email" type="email" placeholder="Email" required />
+            <input id="reg-password" type="password" placeholder="Mật khẩu (>=4 ký tự)" required />
+            <div class="msg" id="reg-msg"></div>
+            <div class="actions">
+                <button type="button" id="to-login" class="link">Đã có tài khoản</button>
+                <button type="submit" class="btn primary">Đăng ký</button>
+            </div>
+        </form>
+
+        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+            <button id="guest" class="btn">Tiếp tục không đăng nhập</button>
+            <a href="bang_hang.html" class="muted">Về cửa hàng</a>
+        </div>
+    </div>
+
+    <script>
+        // Simple client-side login/register using localStorage (shared with bang_hang.html)
+        (function(){
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const toRegister = document.getElementById('to-register');
+            const toLogin = document.getElementById('to-login');
+            const guest = document.getElementById('guest');
+            const title = document.getElementById('title');
+            const loginMsg = document.getElementById('login-msg');
+            const regMsg = document.getElementById('reg-msg');
+
+            function loadUsers(){ try{ const s = localStorage.getItem('simple-users'); return s?JSON.parse(s):[] }catch(e){return []} }
+            function saveUsers(u){ try{ localStorage.setItem('simple-users', JSON.stringify(u)); }catch(e){} }
+            function saveCurrent(u){ try{ if(u) localStorage.setItem('simple-current-user', JSON.stringify(u)); else localStorage.removeItem('simple-current-user'); }catch(e){} }
+
+            toRegister.addEventListener('click', ()=>{ loginForm.style.display='none'; registerForm.style.display='flex'; title.textContent='Đăng ký'; loginMsg.textContent=''; regMsg.textContent=''; });
+            toLogin && toLogin.addEventListener('click', ()=>{ registerForm.style.display='none'; loginForm.style.display='flex'; title.textContent='Đăng nhập'; loginMsg.textContent=''; regMsg.textContent=''; });
+
+            loginForm.addEventListener('submit', function(e){
+                e.preventDefault(); loginMsg.textContent='';
+                const email = document.getElementById('login-email').value.trim().toLowerCase();
+                const pass = document.getElementById('login-password').value;
+                const users = loadUsers();
+                const user = users.find(u=>u.email===email && u.password===pass);
+                if(!user){ loginMsg.textContent='Email hoặc mật khẩu không đúng.'; return; }
+                saveCurrent(user);
+                // redirect to main page
+                window.location.href = 'bang_hang.html';
+            });
+
+            registerForm.addEventListener('submit', function(e){
+                e.preventDefault(); regMsg.textContent='';
+                const name = document.getElementById('reg-name').value.trim();
+                const email = document.getElementById('reg-email').value.trim().toLowerCase();
+                const pass = document.getElementById('reg-password').value;
+                if(pass.length < 4){ regMsg.textContent='Mật khẩu phải >= 4 ký tự'; return; }
+                const users = loadUsers();
+                if(users.find(u=>u.email===email)){ regMsg.textContent='Email đã được dùng.'; return; }
+                const user = { id: Date.now(), name, email, password: pass };
+                users.push(user); saveUsers(users); saveCurrent(user);
+                window.location.href = 'bang_hang.html';
+            });
+
+            guest.addEventListener('click', function(){
+                // mark skip so main page won't force auth
+                try{ localStorage.setItem('simple-skip-auth','1'); }catch(e){}
+                window.location.href = 'bang_hang.html';
+            });
+        })();
+    </script>
+</body>
+</html>

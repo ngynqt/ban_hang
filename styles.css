@@ -1,0 +1,39 @@
+/* styles.css - giao diện cơ bản cho cửa hàng mẫu */
+:root{
+  --accent:#0078d4;
+  --bg:#f7f7f8;
+  --muted:#666;
+}
+*{box-sizing:border-box}
+body{font-family:Segoe UI, Roboto, Arial, sans-serif;margin:0;background:var(--bg);color:#222}
+.site-header{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.site-header h1{margin:0;font-size:20px}
+.btn{background:#eee;border:0;padding:8px 12px;border-radius:6px;cursor:pointer}
+.header-actions{display:flex;gap:8px;align-items:center}
+.search-input{padding:8px 10px;border-radius:6px;border:1px solid #e6e6e6;min-width:220px;max-width:320px}
+
+/* auth form styles */
+.auth-form{display:flex;flex-direction:column;gap:8px}
+.auth-form label{font-size:13px}
+.auth-form input{width:100%;padding:8px;border-radius:6px;border:1px solid #e6e6e6}
+.auth-body{padding-top:8px}
+.hidden{display:none}
+.cart-modal .cart-sheet{max-width:420px}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.small{padding:6px 8px;font-size:13px}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;padding:24px}
+.card{background:#fff;border-radius:8px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.05);display:flex;flex-direction:column}
+.card img{width:100%;height:160px;object-fit:cover;border-radius:6px}
+.card h3{margin:10px 0 6px;font-size:16px}
+.price{font-weight:600;color:var(--accent)}
+.card .actions{margin-top:auto;display:flex;gap:8px}
+.cart-modal.hidden{display:none}
+.cart-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;justify-content:flex-end;padding:24px}
+.cart-sheet{width:360px;background:#fff;border-radius:8px;padding:16px;display:flex;flex-direction:column;height:80vh}
+.cart-header{display:flex;justify-content:space-between;align-items:center}
+.cart-items{list-style:none;padding:0;margin:12px 0;overflow:auto;flex:1}
+.cart-items li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.cart-items img{width:64px;height:64px;object-fit:cover;border-radius:6px}
+.cart-footer{display:flex;justify-content:space-between;align-items:center;padding-top:12px}
+.muted{color:var(--muted);font-size:13px}
+@media (max-width:600px){.cart-sheet{width:100%}}
